@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'incidents',
+    'rest_framework', #rest API extra funkce
+    'incidents', #appka pro incidents
 ]
 
 MIDDLEWARE = [
