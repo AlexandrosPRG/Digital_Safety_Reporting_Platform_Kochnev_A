@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Safety Reporting Platform</title>
+</head>
+<body>
+  <nav>
+    {% if user.is_authenticated %}
+      Prihlasen: {{ user.username }} |
+      <a href="{% url 'incident_list' %}">Incidenty</a> |
+      <a href="{% url 'incident_create' %}">Novy incident</a> |
+      <a href="{% url 'dashboard' %}">Dashboard</a> |
+      <a href="{% url 'logout' %}">Odhlasit</a>
+    {% else %}
+      <a href="{% url 'login' %}">Prihlasit</a>
+    {% endif %}
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% extends "incidents/base.html" %}
+{% block content %}
+<h1>Zmena stavu incidentu</h1>
+<p>Incident: <strong>{{ incident.title }}</strong></p>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Ulozit stav</button>
+</form>
+{% endblock %}

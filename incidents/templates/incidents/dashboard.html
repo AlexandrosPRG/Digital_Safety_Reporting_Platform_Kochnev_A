@@ -1,0 +1,22 @@
+{% extends "incidents/base.html" %}
+{% block content %}
+<h1>Dashboard (manager)</h1>
+
+<h2>Statistika podle rizika</h2>
+<ul>
+  {% for row in by_risk %}
+    <li>{{ row.risk_level }}: {{ row.count }}</li>
+  {% empty %}
+    <li>Zadne data</li>
+  {% endfor %}
+</ul>
+
+<h2>Statistika podle stavu</h2>
+<ul>
+  {% for row in by_status %}
+    <li>{{ row.status }}: {{ row.count }}</li>
+  {% empty %}
+    <li>Zadne data</li>
+  {% endfor %}
+</ul>
+{% endblock %}

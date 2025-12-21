@@ -1,0 +1,26 @@
+{% extends "incidents/base.html" %}
+{% block content %}
+<h1>Detail incidentu</h1>
+
+<p><strong>Nazev:</strong> {{ incident.title }}</p>
+<p><strong>Typ:</strong> {{ incident.get_incident_type_display }}</p>
+<p><strong>Riziko:</strong> {{ incident.get_risk_level_display }}</p>
+<p><strong>Stav:</strong> {{ incident.get_status_display }}</p>
+<p><strong>Datum udalosti:</strong> {{ incident.date_occurred }}</p>
+<p><strong>Lokalita:</strong> {{ incident.location }}</p>
+
+<p><strong>Kategorie:</strong>
+  {% for c in incident.categories.all %}
+    {{ c.name }}{% if not forloop.last %}, {% endif %}
+  {% empty %}
+    zadne
+  {% endfor %}
+</p>
+
+<p><strong>Popis:</strong><br>{{ incident.description }}</p>
+
+<p>
+  <a href="{% url 'incident_update_status' incident.pk %}">Zmenit stav (manager)</a>
+</p>
+
+{% endblock %}
