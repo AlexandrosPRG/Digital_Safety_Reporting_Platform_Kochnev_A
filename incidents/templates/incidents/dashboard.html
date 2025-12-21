@@ -1,5 +1,6 @@
 {% extends "incidents/base.html" %}
 {% block content %}
+
 <h1>Dashboard (manager)</h1>
 
 <h2>Statistika podle rizika</h2>
@@ -19,4 +20,14 @@
     <li>Zadne data</li>
   {% endfor %}
 </ul>
+
+<hr>
+
+<h2>Export</h2>
+<p>
+  <a href="{% url 'export_incidents_excel' %}">
+    Stahnout Excel report
+  </a>
+</p>
+
 {% endblock %}
