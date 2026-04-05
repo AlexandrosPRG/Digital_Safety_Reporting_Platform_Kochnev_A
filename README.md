@@ -45,7 +45,7 @@ Relations:
 
 1. Clone repository:
 git clone https://github.com/AlexandrosPRG/Digital_Safety_Reporting_Platform_Kochnev_A.git
-cd Digital_Safety_Reporting_Platform
+cd Digital_Safety_Reporting_Platform_Kochnev_A
 
 2. Create virtual environment
 python -m venv .venv
