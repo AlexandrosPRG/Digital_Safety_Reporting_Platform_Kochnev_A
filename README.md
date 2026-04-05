@@ -48,6 +48,7 @@ git clone https://github.com/AlexandrosPRG/Digital_Safety_Reporting_Platform_Koc
 cd Digital_Safety_Reporting_Platform_Kochnev_A
 
 2. Create virtual environment
+```bash
 python -m venv .venv
 .venv\Scripts\activate
 
