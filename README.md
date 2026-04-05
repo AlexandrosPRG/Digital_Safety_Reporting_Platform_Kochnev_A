@@ -54,33 +54,27 @@ python -m venv .venv
 ```
 
 3. Install dependencies
-````markdown
 ```bash
 pip install -r requirements.txt
 ```
 4. Apply migrations
-````markdown
 ```bash
 python manage.py migrate
 ```
 5. Create superuser (optional)
-````markdown
 ```bash
 python manage.py createsuperuser
 ```
 6. Run development server
-````markdown
 ```bash
 python manage.py runserver
 ```
 Application will be available at:
-````markdown
 ```bash
 http://127.0.0.1:8000/
 ```
 7. Testing
 Run tests with pytest:
-````markdown
 ```bash
 pytest
 ```
