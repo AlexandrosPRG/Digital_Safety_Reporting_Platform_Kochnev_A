@@ -48,15 +48,14 @@ git clone https://github.com/AlexandrosPRG/Digital_Safety_Reporting_Platform_Koc
 cd Digital_Safety_Reporting_Platform_Kochnev_A
 
 2. Create virtual environment
-```bash
-python -m venv .venv
-.venv\Scripts\activate
+```bash python -m venv .venv
+```bash .venv\Scripts\activate
 
 3. Install dependencies
-pip install -r requirements.txt
+```bash pip install -r requirements.txt
 
 4. Apply migrations
-python manage.py migrate
+```bash python manage.py migrate
 
 5. Create superuser (optional)
 python manage.py createsuperuser
