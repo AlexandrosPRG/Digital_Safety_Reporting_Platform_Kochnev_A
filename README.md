@@ -52,7 +52,7 @@ cd Digital_Safety_Reporting_Platform_Kochnev_A
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
-```
+````
 
 3. Install dependencies
 ````markdown
