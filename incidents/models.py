@@ -3,63 +3,85 @@ from django.contrib.auth.models import User
 
 
 class EmployeeProfile(models.Model):
-    """Model pro profil zamestnance s roli v systemu."""
+    """Represents an employee profile with a role in the system."""
+
+    ROLE_EMPLOYEE = 'EMPLOYEE'
+    ROLE_MANAGER = 'SAFETY_MANAGER'
+
     ROLE_CHOICES = [
-        ('EMPLOYEE', 'Employee'),
-        ('SAFETY_MANAGER', 'Safety Manager'),
+        (ROLE_EMPLOYEE, 'Employee'),
+        (ROLE_MANAGER, 'Safety Manager'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
     def __str__(self):
-        """Vraci jmeno uzivatele a jeho roli."""
-        return f"{self.user.username} ({self.role})"
+        return f"{self.user.username} ({self.get_role_display()})"
 
 
 class Location(models.Model):
-    """Model pro pracovni lokalitu nebo usek."""
+    """Represents a workplace location or area."""
+
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        """Vraci nazev lokality."""
         return self.name
 
 
 class IncidentCategory(models.Model):
-    """Model pro kategorii incidentu."""
+    """Represents a category assigned to incidents."""
+
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        """Vraci nazev kategorie incidentu."""
         return self.name
 
 
 class Incident(models.Model):
-    """Model pro bezpecnostni incident nebo near miss."""
+    """Represents a safety incident or near miss."""
+
+    TYPE_NEAR_MISS = 'NEAR_MISS'
+    TYPE_INJURY = 'INJURY'
+    TYPE_UNSAFE = 'UNSAFE'
 
     TYPE_CHOICES = [
-        ('NEAR_MISS', 'Near Miss'),
-        ('INJURY', 'Injury'),
-        ('UNSAFE', 'Unsafe Condition'),
+        (TYPE_NEAR_MISS, 'Near Miss'),
+        (TYPE_INJURY, 'Injury'),
+        (TYPE_UNSAFE, 'Unsafe Condition'),
     ]
+
+    RISK_LOW = 'LOW'
+    RISK_MEDIUM = 'MEDIUM'
+    RISK_HIGH = 'HIGH'
 
     RISK_CHOICES = [
-        ('LOW', 'Low'),
-        ('MEDIUM', 'Medium'),
-        ('HIGH', 'High'),
+        (RISK_LOW, 'Low'),
+        (RISK_MEDIUM, 'Medium'),
+        (RISK_HIGH, 'High'),
     ]
 
+    STATUS_NEW = 'NEW'
+    STATUS_IN_PROGRESS = 'IN_PROGRESS'
+    STATUS_CLOSED = 'CLOSED'
+
     STATUS_CHOICES = [
-        ('NEW', 'New'),
-        ('IN_PROGRESS', 'In Progress'),
-        ('CLOSED', 'Closed'),
+        (STATUS_NEW, 'New'),
+        (STATUS_IN_PROGRESS, 'In Progress'),
+        (STATUS_CLOSED, 'Closed'),
     ]
 
     title = models.CharField(max_length=200)
     description = models.TextField()
+
     incident_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     risk_level = models.CharField(max_length=10, choices=RISK_CHOICES)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_NEW,
+    )
+
     date_occurred = models.DateField()
     date_reported = models.DateTimeField(auto_now_add=True)
 
@@ -67,19 +89,17 @@ class Incident(models.Model):
     location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True)
     categories = models.ManyToManyField(IncidentCategory, blank=True)
 
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='NEW',
-    )
+    class Meta:
+        ordering = ['-date_reported']
+        verbose_name = 'Incident'
+        verbose_name_plural = 'Incidents'
 
     def __str__(self):
-        """Vraci kratky nazev incidentu."""
-        return self.title
+        return f"{self.title} ({self.get_risk_level_display()})"
 
 
 class CorrectiveAction(models.Model):
-    """Model pro korektivni opatreni k incidentu."""
+    """Represents a corrective action linked to an incident."""
 
     incident = models.ForeignKey(Incident, on_delete=models.CASCADE)
     description = models.TextField()
@@ -93,6 +113,8 @@ class CorrectiveAction(models.Model):
         blank=True,
     )
 
+    class Meta:
+        ordering = ['due_date']
+
     def __str__(self):
-        """Vraci popis opatreni s referenci na incident."""
-        return f"Action for {self.incident.title}"
+        return f"{self.incident.title} - Action"

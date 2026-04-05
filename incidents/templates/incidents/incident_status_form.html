@@ -1,11 +1,55 @@
 {% extends "incidents/base.html" %}
 {% block content %}
-<h1>Zmena stavu incidentu</h1>
-<p>Incident: <strong>{{ incident.title }}</strong></p>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Ulozit stav</button>
-</form>
+<div class="container mt-4">
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-light">
+      <h1 class="mb-0">Update Incident Status</h1>
+    </div>
+
+    <div class="card-body">
+
+      <div class="mb-4 p-3 border rounded bg-light">
+        <p class="mb-2"><strong>Incident:</strong> {{ incident.title }}</p>
+        <p class="mb-2"><strong>Current Status:</strong> {{ incident.get_status_display }}</p>
+        <p class="mb-0"><strong>Risk Level:</strong> {{ incident.get_risk_level_display }}</p>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label for="{{ form.status.id_for_label }}" class="form-label">New Status</label>
+          {{ form.status }}
+          {% if form.status.errors %}
+            <div class="text-danger small mt-1">{{ form.status.errors }}</div>
+          {% endif %}
+        </div>
+
+        {% if form.comment %}
+        <div class="mb-3">
+          <label for="{{ form.comment.id_for_label }}" class="form-label">Status Update Comment</label>
+          {{ form.comment }}
+          {% if form.comment.errors %}
+            <div class="text-danger small mt-1">{{ form.comment.errors }}</div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-between">
+          <a href="{% url 'incident_detail' incident.pk %}" class="btn btn-outline-secondary">
+            Back to Details
+          </a>
+          <button type="submit" class="btn btn-primary">
+            Save Status Update
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+
 {% endblock %}

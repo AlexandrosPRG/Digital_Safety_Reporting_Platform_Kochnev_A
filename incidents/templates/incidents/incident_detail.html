@@ -1,26 +1,130 @@
 {% extends "incidents/base.html" %}
 {% block content %}
-<h1>Detail incidentu</h1>
 
-<p><strong>Nazev:</strong> {{ incident.title }}</p>
-<p><strong>Typ:</strong> {{ incident.get_incident_type_display }}</p>
-<p><strong>Riziko:</strong> {{ incident.get_risk_level_display }}</p>
-<p><strong>Stav:</strong> {{ incident.get_status_display }}</p>
-<p><strong>Datum udalosti:</strong> {{ incident.date_occurred }}</p>
-<p><strong>Lokalita:</strong> {{ incident.location }}</p>
+<div class="container mt-4">
 
-<p><strong>Kategorie:</strong>
-  {% for c in incident.categories.all %}
-    {{ c.name }}{% if not forloop.last %}, {% endif %}
-  {% empty %}
-    zadne
-  {% endfor %}
-</p>
+  {% if user.username == 'demo' %}
+    <div class="alert alert-warning" role="alert">
+      <strong>Demo mode:</strong> You can view incident details, but changes are disabled.
+    </div>
+  {% endif %}
 
-<p><strong>Popis:</strong><br>{{ incident.description }}</p>
+  {% if incident.risk_level == 'high' %}
+    <div class="alert alert-danger d-flex justify-content-between align-items-center" role="alert">
+      <div>
+        <strong>High-Risk Incident:</strong> This incident requires increased attention and timely follow-up.
+      </div>
+      <span class="badge bg-danger">High Risk</span>
+    </div>
+  {% elif incident.risk_level == 'medium' %}
+    <div class="alert alert-warning d-flex justify-content-between align-items-center" role="alert">
+      <div>
+        <strong>Medium-Risk Incident:</strong> Review and monitor this incident carefully.
+      </div>
+      <span class="badge bg-warning text-dark">Medium Risk</span>
+    </div>
+  {% endif %}
 
-<p>
-  <a href="{% url 'incident_update_status' incident.pk %}">Zmenit stav (manager)</a>
-</p>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Incident Details</h1>
+
+    <span class="badge
+      {% if incident.status == 'open' %}bg-danger
+      {% elif incident.status == 'in_progress' %}bg-warning text-dark
+      {% elif incident.status == 'closed' %}bg-success
+      {% else %}bg-secondary
+      {% endif %}
+      fs-6">
+      {{ incident.get_status_display }}
+    </span>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-light">
+      <h4 class="mb-0">{{ incident.title }}</h4>
+    </div>
+
+    <div class="card-body">
+
+      <div class="row g-4 mb-4">
+        <div class="col-md-6">
+          <div class="border rounded p-3 h-100">
+            <h5 class="mb-3">Incident Information</h5>
+
+            <p class="mb-2"><strong>Type:</strong> {{ incident.get_incident_type_display }}</p>
+
+            <p class="mb-2">
+              <strong>Risk Level:</strong>
+              <span class="badge
+                {% if incident.risk_level == 'high' %}bg-danger
+                {% elif incident.risk_level == 'medium' %}bg-warning text-dark
+                {% elif incident.risk_level == 'low' %}bg-success
+                {% else %}bg-secondary
+                {% endif %}
+              ">
+                {{ incident.get_risk_level_display }}
+              </span>
+            </p>
+
+            <p class="mb-2"><strong>Date of Occurrence:</strong> {{ incident.date_occurred }}</p>
+            <p class="mb-0"><strong>Location:</strong> {{ incident.location }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="border rounded p-3 h-100">
+            <h5 class="mb-3">Tracking Overview</h5>
+
+            <p class="mb-2"><strong>Status:</strong> {{ incident.get_status_display }}</p>
+
+            <p class="mb-2">
+              <strong>Incident Age:</strong>
+              {{ incident.date_occurred|timesince }}
+            </p>
+
+            <p class="mb-0">
+              <strong>Categories:</strong><br>
+              {% for c in incident.categories.all %}
+                <span class="badge bg-secondary me-1 mb-1">{{ c.name }}</span>
+              {% empty %}
+                <span class="text-muted">None</span>
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border rounded p-3 mb-3">
+        <h5 class="mb-3">Description</h5>
+        <p class="mb-0">{{ incident.description }}</p>
+      </div>
+
+      {% if incident.status == 'open' and incident.risk_level == 'high' %}
+        <div class="alert alert-danger mb-0" role="alert">
+          <strong>Action Recommended:</strong> This incident is still open and marked as high risk.
+          Review status and assign follow-up actions as soon as possible.
+        </div>
+      {% elif incident.status == 'open' %}
+        <div class="alert alert-info mb-0" role="alert">
+          <strong>Open Incident:</strong> This case is still under review and may require follow-up.
+        </div>
+      {% endif %}
+
+    </div>
+
+    <div class="card-footer bg-white d-flex justify-content-between">
+      <a href="{% url 'incident_list' %}" class="btn btn-outline-secondary">
+        Back to Incidents
+      </a>
+
+      {% if user.is_authenticated and user.username != 'demo' %}
+        <a href="{% url 'incident_update_status' incident.pk %}" class="btn btn-primary">
+          Change Status
+        </a>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
 
 {% endblock %}

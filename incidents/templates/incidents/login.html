@@ -1,9 +1,45 @@
 {% extends "incidents/base.html" %}
 {% block content %}
-<h1>Prihlaseni</h1>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Prihlasit</button>
-</form>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-light">
+          <h1 class="mb-0 fs-3">Sign In</h1>
+        </div>
+
+        <div class="card-body">
+
+          <div class="alert alert-info">
+            <strong>Demo access</strong><br>
+            Username: <strong>demo</strong><br>
+            Password: <strong>demo</strong>
+          </div>
+
+          {% if form.errors %}
+            <div class="alert alert-danger">
+              Invalid username or password. Please try again.
+            </div>
+          {% endif %}
+
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="d-grid mt-3">
+              <button type="submit" class="btn btn-primary">
+                Sign In
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 {% endblock %}

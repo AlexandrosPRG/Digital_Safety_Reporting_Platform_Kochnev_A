@@ -1,33 +1,163 @@
 {% extends "incidents/base.html" %}
 {% block content %}
 
-<h1>Dashboard (manager)</h1>
+<div class="container mt-4">
 
-<h2>Statistika podle rizika</h2>
-<ul>
-  {% for row in by_risk %}
-    <li>{{ row.risk_level }}: {{ row.count }}</li>
-  {% empty %}
-    <li>Zadne data</li>
-  {% endfor %}
-</ul>
+  {% if is_demo %}
+    <div class="alert alert-warning" role="alert">
+      <strong>Demo mode:</strong> You can view dashboard data and export reports, but changes are disabled.
+    </div>
+  {% endif %}
 
-<h2>Statistika podle stavu</h2>
-<ul>
-  {% for row in by_status %}
-    <li>{{ row.status }}: {{ row.count }}</li>
-  {% empty %}
-    <li>Zadne data</li>
-  {% endfor %}
-</ul>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="mb-1">Incident Dashboard</h1>
+      <p class="text-muted mb-0">
+        Overview of incidents by risk level and status.
+      </p>
+    </div>
+  </div>
 
-<hr>
+  <div class="row g-4 mb-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-primary text-white">
+          Incidents by Risk Level
+        </div>
+        <div class="card-body">
+          <canvas id="riskChart"></canvas>
+        </div>
+        <div class="card-footer bg-white">
+          <ul class="list-group list-group-flush">
+            {% for row in by_risk %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ row.risk_display }}
+                <span class="badge bg-primary rounded-pill">{{ row.count }}</span>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">No data available</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
 
-<h2>Export</h2>
-<p>
-  <a href="{% url 'export_incidents_excel' %}">
-    Stahnout Excel report
-  </a>
-</p>
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-success text-white">
+          Incidents by Status
+        </div>
+        <div class="card-body">
+          <canvas id="statusChart"></canvas>
+        </div>
+        <div class="card-footer bg-white">
+          <ul class="list-group list-group-flush">
+            {% for row in by_status %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ row.risk_display }}
+                <span class="badge bg-success rounded-pill">{{ row.count }}</span>
+              </li>
+            {% empty %}
+              <li class="list-group-item text-muted">No data available</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-header">
+      Export
+    </div>
+    <div class="card-body">
+      <a href="{% url 'export_incidents_excel' %}" class="btn btn-outline-primary">
+        Download Excel Report
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const riskLabels = [
+    {% for row in by_risk %}
+      "{{ row.risk_level|escapejs }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  const riskData = [
+    {% for row in by_risk %}
+      {{ row.count }}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  const statusLabels = [
+    {% for row in by_status %}
+      "{{ row.status|escapejs }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  const statusData = [
+    {% for row in by_status %}
+      {{ row.count }}{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  if (riskLabels.length > 0) {
+    const riskCtx = document.getElementById("riskChart").getContext("2d");
+    new Chart(riskCtx, {
+      type: "bar",
+      data: {
+        labels: riskLabels,
+        datasets: [{
+          label: "Number of Incidents",
+          data: riskData,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0
+            }
+          }
+        }
+      }
+    });
+  }
+
+  if (statusLabels.length > 0) {
+    const statusCtx = document.getElementById("statusChart").getContext("2d");
+    new Chart(statusCtx, {
+      type: "pie",
+      data: {
+        labels: statusLabels,
+        datasets: [{
+          label: "Number of Incidents",
+          data: statusData,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    });
+  }
+</script>
 
 {% endblock %}
