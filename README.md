@@ -80,15 +80,15 @@ pytest
 ```
 ---
 ## Example Use Case
-Employee logs in and reports a near-miss incident
-Incident is stored with structured data (risk, category, location, date)
-Safety Manager reviews the incident and updates status
-Data is visible in dashboard and can be exported to Excel
+- Employee logs in and reports a near-miss incident
+- Incident is stored with structured data (risk, category, location, date)
+- Safety Manager reviews the incident and updates status
+- Data is visible in dashboard and can be exported to Excel
 
 ## Notes
-This project is a simplified prototype created for learning purposes
-It does not contain any real company or confidential data
-Designed to demonstrate backend development and basic OHS digitalization concepts
+- This project is a simplified prototype created for learning purposes
+- It does not contain any real company or confidential data
+- Designed to demonstrate backend development and basic OHS digitalization concepts
 
 ## Author
 Alexander Kochnev
