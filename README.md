@@ -27,6 +27,37 @@ The goal of this project is to provide a structured and centralized way to captu
 
 ---
 
+## Tech Stack
+
+- Python (Django)
+- PostgreSQL
+- Django REST Framework
+- Chart.js
+- Bootstrap
+- pytest
+- openpyxl
+
+---
+
+## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/Incident-Dashboard.png)
+
+### Incident List
+![Incident List](screenshots/Incident-List.png)
+
+### Incident Detail
+![Incident Detail](screenshots/Incident-Details.png)
+
+### Sign In
+![Sign In](screenshots/Sign-In.png)
+
+### Export Excel Report
+![Export Excel Report](screenshots/Export-Excel-Report.png)
+
+---
+
 ## Data Model
 The application includes multiple related models:
 - EmployeeProfile (user roles)
@@ -44,10 +75,10 @@ Relations:
 ## How to Run Locally
 
 1. Clone repository:
-git clone https://github.com/AlexandrosPRG/Digital_Safety_Reporting_Platform_Kochnev_A.git
-cd Digital_Safety_Reporting_Platform_Kochnev_A
+git clone https://github.com/AlexandrosPRG/Digital_Safety_Reporting_Platform_Kochnev_A
+git cd Digital_Safety_Reporting_Platform_Kochnev_A
 
-2. Create virtual environment
+3. Create virtual environment
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
@@ -79,16 +110,23 @@ Run tests with pytest:
 pytest
 ```
 ---
+## Demo
+
+Demo mode available (read-only access).
+
+---
 ## Example Use Case
 - Employee logs in and reports a near-miss incident
 - Incident is stored with structured data (risk, category, location, date)
 - Safety Manager reviews the incident and updates status
 - Data is visible in dashboard and can be exported to Excel
-
+  
+---
 ## Notes
 - This project is a simplified prototype created for learning purposes
 - It does not contain any real company or confidential data
 - Designed to demonstrate backend development and basic OHS digitalization concepts
 
+---
 ## Author
 Alexander Kochnev
