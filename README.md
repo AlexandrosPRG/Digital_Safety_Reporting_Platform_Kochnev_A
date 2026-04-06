@@ -42,19 +42,19 @@ The goal of this project is to provide a structured and centralized way to captu
 ## Screenshots
 
 ### Dashboard
-![Dashboard](screenshots/Incident Dashboard.png)
+![Dashboard](screenshots/Incident-Dashboard.png)
 
 ### Incident List
-![Incident List](screenshots/Incident List.png)
+![Incident List](screenshots/Incident-List.png)
 
 ### Incident Detail
-![Incident Detail](screenshots/Incident Details.png)
+![Incident Detail](screenshots/Incident-Details.png)
 
 ### Sign In
-![Sign In](screenshots/Sign In.png)
+![Sign In](screenshots/Sign-In.png)
 
 ### Export Excel Report
-![Export Excel Report](screenshots/Export Excel Report.png)
+![Export Excel Report](screenshots/Export-Excel-Report.png)
 
 ---
 
