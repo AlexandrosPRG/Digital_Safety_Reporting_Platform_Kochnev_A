@@ -46,9 +46,9 @@
           <tbody>
             {% for i in incidents %}
             <tr class="
-              {% if i.risk_level == 'high' and i.status == 'open' %}
+              {% if i.risk_level == 'HIGH' and i.status == 'NEW' %}
                 table-danger
-              {% elif i.risk_level == 'high' %}
+              {% elif i.risk_level == 'HIGH' %}
                 table-warning
               {% endif %}
             ">
@@ -57,9 +57,9 @@
                   {{ i.title }}
                 </a>
 
-                {% if i.risk_level == 'high' and i.status == 'open' %}
+                {% if i.risk_level == 'HIGH' and i.status == 'NEW' %}
                   <div class="small text-danger mt-1">
-                    High-risk incident still open
+                    High-risk incident still new
                   </div>
                 {% endif %}
               </td>
@@ -68,9 +68,9 @@
 
               <td>
                 <span class="badge
-                  {% if i.risk_level == 'high' %}bg-danger
-                  {% elif i.risk_level == 'medium' %}bg-warning text-dark
-                  {% elif i.risk_level == 'low' %}bg-success
+                  {% if i.risk_level == 'HIGH' %}bg-danger
+                  {% elif i.risk_level == 'MEDIUM' %}bg-warning text-dark
+                  {% elif i.risk_level == 'LOW' %}bg-success
                   {% else %}bg-secondary
                   {% endif %}
                 ">
@@ -80,9 +80,9 @@
 
               <td>
                 <span class="badge
-                  {% if i.status == 'open' %}bg-danger
-                  {% elif i.status == 'in_progress' %}bg-warning text-dark
-                  {% elif i.status == 'closed' %}bg-success
+                  {% if i.status == 'NEW' %}bg-danger
+                  {% elif i.status == 'IN_PROGRESS' %}bg-warning text-dark
+                  {% elif i.status == 'CLOSED' %}bg-success
                   {% else %}bg-secondary
                   {% endif %}
                 ">

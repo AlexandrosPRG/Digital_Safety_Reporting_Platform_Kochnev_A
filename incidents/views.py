@@ -11,47 +11,47 @@ from .models import EmployeeProfile, Incident
 
 
 def _get_profile(user):
-    """Ziska nebo vytvori EmployeeProfile pro prihlaseneho uzivatele."""
+    """Gets or creates an employee profile for the authenticated user."""
     profile, _ = EmployeeProfile.objects.get_or_create(
         user=user,
-        defaults={"role": "EMPLOYEE"},
+        defaults={"role": EmployeeProfile.ROLE_EMPLOYEE},
     )
     return profile
 
 
 def _is_manager(user):
-    """Vraci True, pokud ma uzivatel roli SAFETY_MANAGER."""
+    """Returns True if the user has the SAFETY_MANAGER role."""
     profile = _get_profile(user)
-    return profile.role == "SAFETY_MANAGER"
+    return profile.role == EmployeeProfile.ROLE_MANAGER
 
 
 def _is_demo_user(user):
-    """Vraci True, pokud je prihlaseny demo uzivatel."""
+    """Returns True if the authenticated user is the demo user."""
     return user.username == "demo"
 
 
 def _can_access_dashboard(user):
-    """Vraci True, pokud uzivatel muze otevrit dashboard."""
+    """Returns True if the user can access the dashboard."""
     return _is_manager(user) or _is_demo_user(user)
 
 
 @login_required
 def incident_list(request):
-    """Zobrazi seznam incidentu pro prihlaseneho uzivatele."""
+    """Displays the incident list for the authenticated user."""
     incidents = Incident.objects.select_related("location").order_by("-date_reported")
     return render(request, "incidents/incident_list.html", {"incidents": incidents})
 
 
 @login_required
 def incident_detail(request, pk):
-    """Zobrazi detail konkretniho incidentu."""
+    """Displays details of a specific incident."""
     incident = get_object_or_404(Incident, pk=pk)
     return render(request, "incidents/incident_detail.html", {"incident": incident})
 
 
 @login_required
 def incident_create(request):
-    """Umoznuje vytvorit novy incident pomoci POST formulare."""
+    """Allows the user to create a new incident."""
     if _is_demo_user(request.user):
         return HttpResponseForbidden("Demo mode: creating incidents is not allowed.")
 
@@ -71,7 +71,7 @@ def incident_create(request):
 
 @login_required
 def incident_update_status(request, pk):
-    """Umoznuje safety managerovi zmenit stav incidentu pomoci POST."""
+    """Allows a safety manager to update the incident status."""
     if _is_demo_user(request.user):
         return HttpResponseForbidden("Demo mode: status updates are not allowed.")
 
@@ -97,7 +97,7 @@ def incident_update_status(request, pk):
 
 @login_required
 def dashboard(request):
-    """Zobrazi zakladni statistiky pro managera nebo demo uzivatele."""
+    """Displays dashboard statistics for a manager or demo user."""
     if not _can_access_dashboard(request.user):
         return HttpResponseForbidden("Forbidden")
 
@@ -117,7 +117,7 @@ def dashboard(request):
     status_display_map = dict(Incident.STATUS_CHOICES)
 
     for row in by_risk:
-        row["risk_level_display"] = risk_display_map.get(
+        row["risk_display"] = risk_display_map.get(
             row["risk_level"],
             row["risk_level"],
         )
@@ -129,14 +129,14 @@ def dashboard(request):
         )
 
     total_incidents = Incident.objects.count()
-    open_incidents = Incident.objects.filter(status="open").count()
-    high_risk_incidents = Incident.objects.filter(risk_level="high").count()
+    new_incidents = Incident.objects.filter(status=Incident.STATUS_NEW).count()
+    high_risk_incidents = Incident.objects.filter(risk_level=Incident.RISK_HIGH).count()
 
     context = {
         "by_risk": by_risk,
         "by_status": by_status,
         "total_incidents": total_incidents,
-        "open_incidents": open_incidents,
+        "new_incidents": new_incidents,
         "high_risk_incidents": high_risk_incidents,
         "is_demo": _is_demo_user(request.user),
     }
@@ -145,7 +145,7 @@ def dashboard(request):
 
 @login_required
 def export_incidents_excel(request):
-    """Exportuje incidenty do Excel souboru (XLSX)."""
+    """Exports incidents to an Excel file (XLSX)."""
     if not _can_access_dashboard(request.user):
         return HttpResponseForbidden("Forbidden")
 
