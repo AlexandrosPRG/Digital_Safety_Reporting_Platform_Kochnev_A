@@ -27,6 +27,26 @@ The goal of this project is to provide a structured and centralized way to captu
 
 ---
 
+## Tech Stack
+
+- Python (Django)
+- PostgreSQL
+- Django REST Framework
+- Chart.js
+- Bootstrap
+- pytest
+- openpyxl
+
+---
+
+## Screenshots
+
+### Incident List
+<img width="953" height="742" alt="Project Pic No  1" src="https://github.com/user-attachments/assets/f2ffd5bd-17bc-487f-83a6-b5468a4533c5" />
+
+
+---
+
 ## Data Model
 The application includes multiple related models:
 - EmployeeProfile (user roles)
@@ -79,6 +99,9 @@ Run tests with pytest:
 pytest
 ```
 ---
+## Demo
+Demo mode available (read-only access).
+
 ## Example Use Case
 - Employee logs in and reports a near-miss incident
 - Incident is stored with structured data (risk, category, location, date)
